@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "id": "rapid-register",
+  "version": "${version}",
+  "name": "Rapid Register",
+  "description": "Fabric library to register huge amounts of content with very little code.",
+  "authors": [
+    "Snakefangox"
+  ],
+  "contact": {
+    "repo": "https://github.com/Snakefangox/Rapid-Register"
+  },
+  "license": "MIT",
+  "icon": "assets/rapid-register/icon.png",
+  "environment": "*",
+  "entrypoints": {},
+  "mixins": [
+    "rapid-register.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.11.3",
+    "fabric": "*",
+    "minecraft": "1.16.5"
+  }
+}
