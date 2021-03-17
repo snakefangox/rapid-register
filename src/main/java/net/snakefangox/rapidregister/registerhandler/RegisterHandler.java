@@ -4,8 +4,10 @@ import net.minecraft.util.Identifier;
 import net.snakefangox.rapidregister.RapidRegister;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.nio.file.Paths;
 import java.util.Locale;
 
 public abstract class RegisterHandler<T> implements Comparable<RegisterHandler<?>> {
@@ -51,7 +53,16 @@ public abstract class RegisterHandler<T> implements Comparable<RegisterHandler<?
 		return 0;
 	}
 
-	//TODO Create method to get or create dir path
+	protected boolean writeFileWithoutOverwrite(String dirPath, String fileName, String contents) {
+		File dir = new File(dirPath);
+		boolean exists = dir.exists();
+		if (!exists) exists = dir.mkdirs();
+		if (!exists){
+			RapidRegister.LOGGER.warn("Path " + dirPath + " does not exist and could not be created");
+			return false;
+		}
+		File file = new File(dirPath + fileName);
+	}
 
 	protected abstract void register(T obj, Identifier identifier, Annotation[] annotations);
 
