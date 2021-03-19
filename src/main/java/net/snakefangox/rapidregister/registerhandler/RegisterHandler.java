@@ -1,24 +1,38 @@
 package net.snakefangox.rapidregister.registerhandler;
 
-import net.minecraft.util.Identifier;
-import net.snakefangox.rapidregister.RapidRegister;
-import org.jetbrains.annotations.NotNull;
-
 import java.io.File;
-import java.lang.annotation.Annotation;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.lang.reflect.Field;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Locale;
 
+import net.snakefangox.rapidregister.RapidRegister;
+import org.jetbrains.annotations.NotNull;
+
+import net.minecraft.util.Identifier;
+
 public abstract class RegisterHandler<T> implements Comparable<RegisterHandler<?>> {
 
+	protected static final String JSON = ".json";
+
 	private final Class<T> type;
+	private final String typeName;
 
 	public RegisterHandler(Class<T> type) {
-		this.type = type;
+		this(type, type.getSimpleName());
 	}
 
-	/** Tries to register the provided field, returns true if the field can be registered by this handler */
+	public RegisterHandler(Class<T> type, String typeName) {
+		this.type = type;
+		this.typeName = typeName.toLowerCase(Locale.ROOT);
+	}
+
+	/**
+	 * Tries to register the provided field, returns true if the field can be registered by this handler
+	 */
 	@SuppressWarnings("unchecked")
 	public final boolean attemptRegister(Field field, String modid) {
 		try {
@@ -27,9 +41,10 @@ public abstract class RegisterHandler<T> implements Comparable<RegisterHandler<?
 			if (type.isInstance(obj)) {
 				T entry = (T) obj;
 				Identifier identifier = new Identifier(modid, field.getName().toLowerCase(Locale.ROOT));
-				register(entry, identifier, field.getAnnotations());
-				if (RapidRegister.shouldRunDataGen(modid))
-					dataGen(entry, identifier, field.getAnnotations(), RapidRegister.getAssetPath(modid), RapidRegister.getDataPath(modid));
+				register(entry, identifier, field);
+				if (RapidRegister.runDataGen()) {
+					dataGen(entry, identifier, field, RapidRegister.getAssetPath(modid), RapidRegister.getDataPath(modid));
+				}
 				return true;
 			}
 		} catch (IllegalAccessException e) {
@@ -53,20 +68,126 @@ public abstract class RegisterHandler<T> implements Comparable<RegisterHandler<?
 		return 0;
 	}
 
-	protected boolean writeFileWithoutOverwrite(String dirPath, String fileName, String contents) {
-		File dir = new File(dirPath);
+	protected abstract void register(T obj, Identifier identifier, Field field);
+
+	protected abstract void dataGen(T entry, Identifier identifier, Field field, Path assetPath, Path dataPath);
+
+	protected final boolean writeFile(Path dirPath, String fileName, String contents) {
+		return writeFile(dirPath, fileName, contents, false);
+	}
+
+	/**
+	 * Writes the given contents to the given file
+	 *
+	 * @param overwrite if the file will be overwritten if it already exists
+	 * @return true if the file was written, false otherwise
+	 */
+	protected final boolean writeFile(Path dirPath, String fileName, String contents, boolean overwrite) {
+		ensureDirExists(dirPath);
+		File file = dirPath.resolve(fileName).toFile();
+		try {
+			boolean exists = file.exists();
+			if (exists && !overwrite) return false;
+			if (exists && !file.delete()) return false;
+			if (!exists && !file.createNewFile()) return false;
+			FileWriter fileWriter = new FileWriter(file);
+			fileWriter.write(contents);
+			fileWriter.flush();
+			fileWriter.close();
+		} catch (IOException e) {
+			RapidRegister.LOGGER.warn("Exception during dataGen: " + e.getLocalizedMessage());
+			return false;
+		}
+		return true;
+	}
+
+	protected final boolean ensureDirExists(Path dirPath) {
+		File dir = dirPath.toFile();
 		boolean exists = dir.exists();
 		if (!exists) exists = dir.mkdirs();
-		if (!exists){
+		if (!exists) {
 			RapidRegister.LOGGER.warn("Path " + dirPath + " does not exist and could not be created");
 			return false;
 		}
-		File file = new File(dirPath + fileName);
+		return true;
 	}
 
-	protected abstract void register(T obj, Identifier identifier, Annotation[] annotations);
+	protected final String getModelPath() {
+		return "models" + File.separator + typeName;
+	}
 
-	protected abstract void dataGen(T entry, Identifier identifier, Annotation[] annotations, String assetPath, String dataPath);
+	protected final String getTexturePath() {
+		return "textures" + File.separator + typeName;
+	}
+
+	protected final String getJsonName(Identifier identifier) {
+		return identifier.getPath() + JSON;
+	}
+
+	protected final void addLangKey(String modid, String type, Identifier identifier) {
+		Path langDir = getLangPath(modid);
+		ensureDirExists(langDir);
+		File langFile = langDir.resolve(RapidRegister.getLang() + JSON).toFile();
+		try {
+			boolean exists = langFile.exists();
+			FileWriter writer;
+			if (!exists) {
+				exists = langFile.createNewFile();
+				if (exists) {
+					writer = new FileWriter(langFile);
+					writer.write("{\n}");
+					writer.close();
+				} else {
+					RapidRegister.LOGGER.error("Could not get or create lang file in: " + langFile.toString());
+					return;
+				}
+			}
+			StringBuilder langSb = new StringBuilder();
+			Files.lines(langFile.toPath()).forEach(langSb::append);
+			String langString = langSb.toString();
+			String langKey = getLangKey(type, identifier);
+			if (langString.contains(langKey)) return;
+			String replace = ",\n\"" + langKey + "\": \"" + getLangValue(identifier) + "\"\n}";
+			String newLangString = langString.replace("\n}", replace);
+			if (newLangString.equals(langString)) {
+				newLangString = langString.replace("}", replace);
+				if (newLangString.equals(langString)){
+					RapidRegister.LOGGER.error("Could not find ");
+				}
+			}
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	protected final Path getLangPath(String modid) {
+		return Paths.get(RapidRegister.getAssetPath(modid).toString(), "lang");
+	}
+
+	protected final String getLangKey(String type, Identifier identifier) {
+		return type + "." + identifier.getNamespace() + "." + identifier.getPath();
+	}
+
+	protected final String getLangValue(Identifier identifier) {
+		StringBuilder stringBuilder = new StringBuilder();
+		String[] words = identifier.getPath().split("_");
+		for (int i = 0; i < words.length; ++i) {
+			String word = words[i];
+			if (i > 0) stringBuilder.append(" ");
+			stringBuilder.append(word.substring(0, 1).toUpperCase(Locale.ROOT));
+			stringBuilder.append(word.substring(1));
+		}
+		return stringBuilder.toString();
+	}
+
+	protected final String getTemplateName() {
+		return getTemplateName("");
+	}
+
+	protected final String getTemplateName(String prefix) {
+		return (prefix.isEmpty() ? "" : prefix + "_") + typeName + ".json";
+	}
 
 	public Class<T> getType() {
 		return type;

@@ -1,55 +1,42 @@
 package net.snakefangox.rapidregister;
 
-import net.fabricmc.api.ModInitializer;
-import net.snakefangox.rapidregister.annotations.RegisterContents;
+import java.lang.reflect.Modifier;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Arrays;
+
+import net.snakefangox.rapidregister.registerhandler.ItemHandler;
 import net.snakefangox.rapidregister.registerhandler.RegisterHandler;
-import net.snakefangox.rapidregister.registerhandler.TypeRegisterSet;
+import net.snakefangox.rapidregister.storage.TypeRegisterSet;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.reflections.Reflections;
-import org.reflections.scanners.TypeAnnotationsScanner;
 
-import java.io.File;
-import java.lang.reflect.Modifier;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import net.minecraft.item.Item;
+import net.minecraft.item.ToolItem;
+
+import net.fabricmc.api.ModInitializer;
+import net.fabricmc.loader.api.FabricLoader;
 
 public class RapidRegister implements ModInitializer {
 
 	public static final Logger LOGGER = LogManager.getLogger();
+	public static final String DATA_GEN_ARG = "rapidRegister.dataGen";
+	public static final String LANG_ARG = "rapidRegister.lang";
+	public static final String EN_US = "en_us";
 
 	private static final TypeRegisterSet typeRegister = new TypeRegisterSet();
-	private static final Map<String, String> dataGen = new HashMap<>();
+	private static Path dataGenPath = null;
+	private static String lang = EN_US;
+	private static boolean runDataGen = false;
 
 	@Override
 	public void onInitialize() {
-
+		register("modid", TestClass.class);
+		System.exit(0);
 	}
 
 	/**
-	 * Registers all content declared in classes that are in subpackages from the given initializer.
-	 * Useful if your {@link ModInitializer} is in your root source package for your mod.
-	 */
-	public static void register(String modid, ModInitializer modInitializer) {
-		register(modid, modInitializer.getClass().getPackage().getName());
-	}
-
-	/**
-	 * Registers all content declared in classes that are in subpackages from the given root package.
-	 * Useful if your {@link ModInitializer} is in a subpackage or you want to be more specific about
-	 * the location of your content classes.
-	 */
-	public static void register(String modid, String rootContentPackage) {
-		Reflections reflections = new Reflections(rootContentPackage, new TypeAnnotationsScanner());
-		Set<Class<?>> classes = reflections.getTypesAnnotatedWith(RegisterContents.class);
-		classes.forEach(c -> registerClass(c, modid));
-	}
-
-	/**
-	 * Registers all content declared in the given classes. Useful if you don't
-	 * like the overhead that comes with package traversal.
+	 * Registers all content declared in the given classes.
 	 */
 	public static void register(String modid, Class<?>... classes) {
 		Arrays.stream(classes).forEach(c -> registerClass(c, modid));
@@ -64,37 +51,40 @@ public class RapidRegister implements ModInitializer {
 		typeRegister.addHandler(registerHandler);
 	}
 
-	/**
-	 * Requests DataGen for the provided modid
-	 *
-	 * @param resourcePath should point to the root of your resource dir
-	 */
-	public static void requestDataGen(String modid, String resourcePath) {
-		if (dataGen.containsKey(modid)) {
-			LOGGER.warn("Modid " + modid + " somehow already registered for DataGen");
-			return;
-		}
-		if (!resourcePath.endsWith(File.separator)) resourcePath += File.separator;
-		dataGen.put(modid, resourcePath);
+	private static void checkDataGen() {
+		String path = System.getProperty(DATA_GEN_ARG);
+		lang = System.getProperty(LANG_ARG, EN_US);
+		if (path != null) dataGenPath = Paths.get(path).toAbsolutePath().normalize();
+		runDataGen = dataGenPath != null && FabricLoader.getInstance().isDevelopmentEnvironment();
 	}
 
-	public static boolean shouldRunDataGen(String modid) {
-		return dataGen.containsKey(modid);
+	public static boolean runDataGen() {
+		return runDataGen;
 	}
 
-	public static String getResourcePath(String modid) {
-		return dataGen.get(modid);
+	public static Path getResourcePath() {
+		return dataGenPath;
 	}
 
-	public static String getAssetPath(String modid) {
-		return getResourcePath(modid) + "assets" + File.separator;
+	public static Path getAssetPath(String modid) {
+		return Paths.get(getResourcePath().toString(), "assets", modid);
 	}
 
-	public static String getDataPath(String modid) {
-		return getResourcePath(modid) + "data" + File.separator;
+	public static Path getDataPath(String modid) {
+		return Paths.get(getResourcePath().toString(), "data", modid);
+	}
+
+	public static String getLang() {
+		return lang;
+	}
+
+	private static void registerDefaultHandlers() {
+		addRegisterHandler(new ItemHandler<>(Item.class));
+		addRegisterHandler(new ItemHandler<>(ToolItem.class));
 	}
 
 	static {
-
+		checkDataGen();
+		registerDefaultHandlers();
 	}
 }

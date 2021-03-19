@@ -1,7 +1,8 @@
-package net.snakefangox.rapidregister.registerhandler;
+package net.snakefangox.rapidregister.storage;
 
 import net.snakefangox.rapidregister.RapidRegister;
 import net.snakefangox.rapidregister.annotations.Exclude;
+import net.snakefangox.rapidregister.registerhandler.RegisterHandler;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
