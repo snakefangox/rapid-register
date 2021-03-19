@@ -2,6 +2,7 @@ package net.snakefangox.rapidregister.storage;
 
 import net.snakefangox.rapidregister.RapidRegister;
 import net.snakefangox.rapidregister.annotations.Exclude;
+import net.snakefangox.rapidregister.annotations.RegisterContents;
 import net.snakefangox.rapidregister.registerhandler.RegisterHandler;
 
 import java.lang.reflect.Field;
@@ -27,8 +28,10 @@ public class TypeRegisterSet {
 
 	public void attemptRegister(Class<?> clazz, Field field, String modid) {
 		if (field.getAnnotation(Exclude.class) != null) return;
+		RegisterContents register = clazz.getAnnotation(RegisterContents.class);
+		if (register == null) return;
 		for (RegisterHandler<?> registerHandler : registerHandlers) {
-			if (registerHandler.attemptRegister(field, modid)) return;
+			if (registerHandler.attemptRegister(register, field, modid)) return;
 		}
 		RapidRegister.LOGGER.warn("Field " + field.getName() + " in class " + clazz.getName() + " could not be registered");
 	}

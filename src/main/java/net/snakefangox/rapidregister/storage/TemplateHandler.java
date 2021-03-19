@@ -1,21 +1,23 @@
 package net.snakefangox.rapidregister.storage;
 
+import net.minecraft.util.Identifier;
+import net.snakefangox.rapidregister.RapidRegister;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
-
-import net.snakefangox.rapidregister.RapidRegister;
-
-import net.minecraft.util.Identifier;
+import java.util.Set;
 
 public class TemplateHandler {
 	private static final String TEMPLATE_DIR = "templates/";
-	public static final Map<String, String> loadedTemplates = new HashMap<>();
+	private static final Map<String, String> loadedTemplates = new HashMap<>();
+	private static final Set<String> missingTemplates = new HashSet<>();
 
-	public static String getProcessedTemplate(String url, Identifier identifier){
+	public static String getProcessedTemplate(String url, Identifier identifier) {
 		return processTemplate(getOrLoadTemplate(url), identifier);
 	}
 
@@ -28,6 +30,15 @@ public class TemplateHandler {
 			return sTemplate;
 		}
 		return "";
+	}
+
+	public static boolean doesTemplateExist(String url) {
+		if (loadedTemplates.containsKey(url)) return true;
+		if (missingTemplates.contains(url)) return false;
+		String template = getOrLoadTemplate(url);
+		boolean missing = template.isEmpty();
+		if (missing) missingTemplates.add(template);
+		return !missing;
 	}
 
 	// https://stackoverflow.com/questions/309424/how-do-i-read-convert-an-inputstream-into-a-string-in-java

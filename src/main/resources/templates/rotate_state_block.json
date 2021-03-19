@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "@namespace@:block/@path@" },
+    "facing=south": { "model": "@namespace@:block/@path@", "y": 180 },
+    "facing=west": { "model": "@namespace@:block/@path@", "y": 270 },
+    "facing=east": { "model": "@namespace@:block/@path@", "y": 90 }
+  }
+}

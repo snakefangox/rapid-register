@@ -5,6 +5,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 
+import net.minecraft.block.Block;
+import net.snakefangox.rapidregister.registerhandler.BlockHandler;
 import net.snakefangox.rapidregister.registerhandler.ItemHandler;
 import net.snakefangox.rapidregister.registerhandler.RegisterHandler;
 import net.snakefangox.rapidregister.storage.TypeRegisterSet;
@@ -37,6 +39,7 @@ public class RapidRegister implements ModInitializer {
 
 	/**
 	 * Registers all content declared in the given classes.
+	 * All classes must be marked with {@link net.snakefangox.rapidregister.annotations.RegisterContents}
 	 */
 	public static void register(String modid, Class<?>... classes) {
 		Arrays.stream(classes).forEach(c -> registerClass(c, modid));
@@ -81,6 +84,7 @@ public class RapidRegister implements ModInitializer {
 	private static void registerDefaultHandlers() {
 		addRegisterHandler(new ItemHandler<>(Item.class));
 		addRegisterHandler(new ItemHandler<>(ToolItem.class));
+		addRegisterHandler(new BlockHandler<>(Block.class));
 	}
 
 	static {

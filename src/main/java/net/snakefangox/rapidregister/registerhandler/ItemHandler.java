@@ -3,6 +3,7 @@ package net.snakefangox.rapidregister.registerhandler;
 import java.lang.reflect.Field;
 import java.nio.file.Path;
 
+import net.snakefangox.rapidregister.annotations.RegisterContents;
 import net.snakefangox.rapidregister.storage.TemplateHandler;
 
 import net.minecraft.item.Item;
@@ -16,13 +17,14 @@ public class ItemHandler<T extends Item> extends RegisterHandler<T> {
 	}
 
 	@Override
-	protected void register(T obj, Identifier identifier, Field field) {
+	protected void register(T obj, Identifier identifier, Field field, RegisterContents classDefaults) {
 		Registry.register(Registry.ITEM, identifier, obj);
 	}
 
 	@Override
-	protected void dataGen(T entry, Identifier identifier, Field field, Path assetPath, Path dataPath) {
+	protected void dataGen(T entry, Identifier identifier, Field field, Path assetPath, Path dataPath, RegisterContents classDefaults) {
 		writeFile(assetPath.resolve(getModelPath()), getJsonName(identifier), TemplateHandler.getProcessedTemplate(getTemplateName(), identifier));
+		addLangKey(identifier);
 		ensureDirExists(assetPath.resolve(getTexturePath()));
 	}
 }

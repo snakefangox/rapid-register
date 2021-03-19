@@ -1,22 +1,28 @@
 package net.snakefangox.rapidregister.registerhandler;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+import net.minecraft.util.Identifier;
+import net.snakefangox.rapidregister.RapidRegister;
+import net.snakefangox.rapidregister.annotations.RegisterContents;
+import org.jetbrains.annotations.NotNull;
+
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Locale;
-
-import net.snakefangox.rapidregister.RapidRegister;
-import org.jetbrains.annotations.NotNull;
-
-import net.minecraft.util.Identifier;
+import java.util.Map;
 
 public abstract class RegisterHandler<T> implements Comparable<RegisterHandler<?>> {
 
 	protected static final String JSON = ".json";
+	protected static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+	protected static final TypeToken<Map<String, String>> LANG_MAP_TYPE = new TypeToken<Map<String, String>>(){};
 
 	private final Class<T> type;
 	private final String typeName;
@@ -34,16 +40,16 @@ public abstract class RegisterHandler<T> implements Comparable<RegisterHandler<?
 	 * Tries to register the provided field, returns true if the field can be registered by this handler
 	 */
 	@SuppressWarnings("unchecked")
-	public final boolean attemptRegister(Field field, String modid) {
+	public final boolean attemptRegister(RegisterContents classDefaults, Field field, String modid) {
 		try {
 			field.setAccessible(true);
 			Object obj = field.get(null);
 			if (type.isInstance(obj)) {
 				T entry = (T) obj;
 				Identifier identifier = new Identifier(modid, field.getName().toLowerCase(Locale.ROOT));
-				register(entry, identifier, field);
+				register(entry, identifier, field, classDefaults);
 				if (RapidRegister.runDataGen()) {
-					dataGen(entry, identifier, field, RapidRegister.getAssetPath(modid), RapidRegister.getDataPath(modid));
+					dataGen(entry, identifier, field, RapidRegister.getAssetPath(modid), RapidRegister.getDataPath(modid), classDefaults);
 				}
 				return true;
 			}
@@ -68,9 +74,9 @@ public abstract class RegisterHandler<T> implements Comparable<RegisterHandler<?
 		return 0;
 	}
 
-	protected abstract void register(T obj, Identifier identifier, Field field);
+	protected abstract void register(T obj, Identifier identifier, Field field, RegisterContents classDefaults);
 
-	protected abstract void dataGen(T entry, Identifier identifier, Field field, Path assetPath, Path dataPath);
+	protected abstract void dataGen(T entry, Identifier identifier, Field field, Path assetPath, Path dataPath, RegisterContents classDefaults);
 
 	protected final boolean writeFile(Path dirPath, String fileName, String contents) {
 		return writeFile(dirPath, fileName, contents, false);
@@ -124,6 +130,10 @@ public abstract class RegisterHandler<T> implements Comparable<RegisterHandler<?
 		return identifier.getPath() + JSON;
 	}
 
+	protected final void addLangKey(Identifier identifier) {
+		addLangKey(identifier.getNamespace(), getTypeName(), identifier);
+	}
+
 	protected final void addLangKey(String modid, String type, Identifier identifier) {
 		Path langDir = getLangPath(modid);
 		ensureDirExists(langDir);
@@ -142,20 +152,15 @@ public abstract class RegisterHandler<T> implements Comparable<RegisterHandler<?
 					return;
 				}
 			}
-			StringBuilder langSb = new StringBuilder();
-			Files.lines(langFile.toPath()).forEach(langSb::append);
-			String langString = langSb.toString();
+			Map<String, String> langJson = GSON.fromJson(new FileReader(langFile), LANG_MAP_TYPE.getType());
 			String langKey = getLangKey(type, identifier);
-			if (langString.contains(langKey)) return;
-			String replace = ",\n\"" + langKey + "\": \"" + getLangValue(identifier) + "\"\n}";
-			String newLangString = langString.replace("\n}", replace);
-			if (newLangString.equals(langString)) {
-				newLangString = langString.replace("}", replace);
-				if (newLangString.equals(langString)){
-					RapidRegister.LOGGER.error("Could not find ");
-				}
+			if (!langJson.containsKey(langKey)) {
+				langJson.put(langKey, getLangValue(identifier));
+				String newLang = GSON.toJson(langJson, LANG_MAP_TYPE.getType());
+				FileWriter fileWriter = new FileWriter(langFile);
+				fileWriter.write(newLang);
+				fileWriter.close();
 			}
-
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -191,5 +196,9 @@ public abstract class RegisterHandler<T> implements Comparable<RegisterHandler<?
 
 	public Class<T> getType() {
 		return type;
+	}
+
+	public String getTypeName() {
+		return typeName;
 	}
 }

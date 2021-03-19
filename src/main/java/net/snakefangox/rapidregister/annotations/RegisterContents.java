@@ -6,12 +6,11 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Used to indicate a class will have every field
- * that is not marked with {@link Exclude}
- * passed through the register.
- * Doesn't do anything itself, only a reminder.
+ * Required on classes that are going to be passed to {@link net.snakefangox.rapidregister.RapidRegister#register(String, Class[])}.
+ * Also allows for some class wide defaults.
  */
 @Target(ElementType.TYPE)
-@Retention(RetentionPolicy.SOURCE)
+@Retention(RetentionPolicy.RUNTIME)
 public @interface RegisterContents {
+	BlockMeta defaultBlockMeta() default @BlockMeta();
 }
