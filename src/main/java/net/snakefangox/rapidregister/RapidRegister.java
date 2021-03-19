@@ -6,9 +6,7 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 
 import net.minecraft.block.Block;
-import net.snakefangox.rapidregister.registerhandler.BlockHandler;
-import net.snakefangox.rapidregister.registerhandler.ItemHandler;
-import net.snakefangox.rapidregister.registerhandler.RegisterHandler;
+import net.snakefangox.rapidregister.registerhandler.*;
 import net.snakefangox.rapidregister.storage.TypeRegisterSet;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -85,6 +83,9 @@ public class RapidRegister implements ModInitializer {
 		addRegisterHandler(new ItemHandler<>(Item.class));
 		addRegisterHandler(new ItemHandler<>(ToolItem.class));
 		addRegisterHandler(new BlockHandler<>(Block.class));
+		addRegisterHandler(new BlockEntityHandler());
+		addRegisterHandler(new ScreenHandlerTypeHandler());
+		addRegisterHandler(new EntityTypeHandler());
 	}
 
 	static {

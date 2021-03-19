@@ -22,7 +22,8 @@ public abstract class RegisterHandler<T> implements Comparable<RegisterHandler<?
 
 	protected static final String JSON = ".json";
 	protected static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-	protected static final TypeToken<Map<String, String>> LANG_MAP_TYPE = new TypeToken<Map<String, String>>(){};
+	protected static final TypeToken<Map<String, String>> LANG_MAP_TYPE = new TypeToken<Map<String, String>>() {
+	};
 
 	private final Class<T> type;
 	private final String typeName;
@@ -101,7 +102,7 @@ public abstract class RegisterHandler<T> implements Comparable<RegisterHandler<?
 			fileWriter.flush();
 			fileWriter.close();
 		} catch (IOException e) {
-			RapidRegister.LOGGER.warn("Exception during dataGen: " + e.getLocalizedMessage());
+			eatIOException(e);
 			return false;
 		}
 		return true;
@@ -116,6 +117,30 @@ public abstract class RegisterHandler<T> implements Comparable<RegisterHandler<?
 			return false;
 		}
 		return true;
+	}
+
+	protected final File getOrCreateJsonFile(Path dir, String filename) {
+		ensureDirExists(dir);
+		File jsonFile = dir.resolve(filename).toFile();
+		try {
+			boolean exists = jsonFile.exists();
+			FileWriter writer;
+			if (!exists) {
+				exists = jsonFile.createNewFile();
+				if (exists) {
+					writer = new FileWriter(jsonFile);
+					writer.write("{\n}");
+					writer.close();
+				} else {
+					RapidRegister.LOGGER.error("Could not get or create json file in: " + jsonFile.toString());
+					return null;
+				}
+			}
+		} catch (IOException e) {
+			eatIOException(e);
+			return null;
+		}
+		return jsonFile;
 	}
 
 	protected final String getModelPath() {
@@ -136,33 +161,20 @@ public abstract class RegisterHandler<T> implements Comparable<RegisterHandler<?
 
 	protected final void addLangKey(String modid, String type, Identifier identifier) {
 		Path langDir = getLangPath(modid);
-		ensureDirExists(langDir);
-		File langFile = langDir.resolve(RapidRegister.getLang() + JSON).toFile();
+		File langFile = getOrCreateJsonFile(langDir, RapidRegister.getLang() + JSON);
+		if (langFile == null) return;
 		try {
-			boolean exists = langFile.exists();
-			FileWriter writer;
-			if (!exists) {
-				exists = langFile.createNewFile();
-				if (exists) {
-					writer = new FileWriter(langFile);
-					writer.write("{\n}");
-					writer.close();
-				} else {
-					RapidRegister.LOGGER.error("Could not get or create lang file in: " + langFile.toString());
-					return;
-				}
-			}
 			Map<String, String> langJson = GSON.fromJson(new FileReader(langFile), LANG_MAP_TYPE.getType());
 			String langKey = getLangKey(type, identifier);
 			if (!langJson.containsKey(langKey)) {
-				langJson.put(langKey, getLangValue(identifier));
+				langJson.put(langKey, getLangName(identifier));
 				String newLang = GSON.toJson(langJson, LANG_MAP_TYPE.getType());
 				FileWriter fileWriter = new FileWriter(langFile);
 				fileWriter.write(newLang);
 				fileWriter.close();
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			eatIOException(e);
 		}
 	}
 
@@ -174,7 +186,7 @@ public abstract class RegisterHandler<T> implements Comparable<RegisterHandler<?
 		return type + "." + identifier.getNamespace() + "." + identifier.getPath();
 	}
 
-	protected final String getLangValue(Identifier identifier) {
+	protected final String getLangName(Identifier identifier) {
 		StringBuilder stringBuilder = new StringBuilder();
 		String[] words = identifier.getPath().split("_");
 		for (int i = 0; i < words.length; ++i) {
@@ -184,6 +196,10 @@ public abstract class RegisterHandler<T> implements Comparable<RegisterHandler<?
 			stringBuilder.append(word.substring(1));
 		}
 		return stringBuilder.toString();
+	}
+
+	protected final void eatIOException(IOException e) {
+		RapidRegister.LOGGER.warn("Exception during dataGen: " + e.getLocalizedMessage());
 	}
 
 	protected final String getTemplateName() {
