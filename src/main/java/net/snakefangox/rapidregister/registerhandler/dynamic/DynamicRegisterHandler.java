@@ -13,11 +13,11 @@ import java.lang.reflect.Field;
 import java.nio.file.Path;
 import java.util.Stack;
 
-public abstract class DynamicRegistryHandler<T> extends RegisterHandler<T> {
+public abstract class DynamicRegisterHandler<T> extends RegisterHandler<T> {
 
 	private final Stack<Storage> toRegister = new Stack<>();
 
-	public DynamicRegistryHandler(Class<T> type) {
+	public DynamicRegisterHandler(Class<T> type) {
 		super(type);
 	}
 

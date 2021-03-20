@@ -1,2 +1,17 @@
-package net.snakefangox.rapidregister.registerhandler.dynamic;public class DimensionTypeHandler {
+package net.snakefangox.rapidregister.registerhandler.dynamic;
+
+import net.minecraft.util.registry.DynamicRegistryManager;
+import net.minecraft.util.registry.Registry;
+import net.minecraft.world.dimension.DimensionType;
+
+public class DimensionTypeHandler extends DynamicRegisterHandler<DimensionType> {
+
+	public DimensionTypeHandler() {
+		super(DimensionType.class);
+	}
+
+	@Override
+	protected void register(DynamicRegistryManager manager, Storage storage) {
+		addToDynRegistry(manager, Registry.DIMENSION_TYPE_KEY, storage);
+	}
 }
