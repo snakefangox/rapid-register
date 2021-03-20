@@ -9,9 +9,9 @@ import java.lang.reflect.Field;
 import java.nio.file.Path;
 
 @SuppressWarnings("rawtypes")
-public class BlockEntityHandler extends RegisterHandler<BlockEntityType> {
+public class BlockEntityTypeHandler extends RegisterHandler<BlockEntityType> {
 
-	public BlockEntityHandler() {
+	public BlockEntityTypeHandler() {
 		super(BlockEntityType.class);
 	}
 

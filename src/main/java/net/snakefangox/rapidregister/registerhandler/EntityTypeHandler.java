@@ -12,7 +12,7 @@ import java.nio.file.Path;
 public class EntityTypeHandler extends RegisterHandler<EntityType> {
 
 	public EntityTypeHandler() {
-		super(EntityType.class);
+		super(EntityType.class, "entity");
 	}
 
 	@Override
@@ -22,5 +22,6 @@ public class EntityTypeHandler extends RegisterHandler<EntityType> {
 
 	@Override
 	protected void dataGen(EntityType entry, Identifier identifier, Field field, Path assetPath, Path dataPath, RegisterContents classDefaults) {
+		addLangKey(identifier);
 	}
 }

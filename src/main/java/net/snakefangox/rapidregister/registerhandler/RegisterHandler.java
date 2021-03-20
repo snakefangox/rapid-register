@@ -4,15 +4,14 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.Util;
 import net.snakefangox.rapidregister.RapidRegister;
 import net.snakefangox.rapidregister.annotations.RegisterContents;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Locale;
@@ -45,13 +44,12 @@ public abstract class RegisterHandler<T> implements Comparable<RegisterHandler<?
 		try {
 			field.setAccessible(true);
 			Object obj = field.get(null);
-			if (type.isInstance(obj)) {
+			if (type.isAssignableFrom(field.getType())) {
 				T entry = (T) obj;
-				Identifier identifier = new Identifier(modid, field.getName().toLowerCase(Locale.ROOT));
+				Identifier identifier = new Identifier(modid, field.getName().toLowerCase(Locale.ROOT).replace('$', '/'));
 				register(entry, identifier, field, classDefaults);
-				if (RapidRegister.runDataGen()) {
+				if (RapidRegister.runDataGen())
 					dataGen(entry, identifier, field, RapidRegister.getAssetPath(modid), RapidRegister.getDataPath(modid), classDefaults);
-				}
 				return true;
 			}
 		} catch (IllegalAccessException e) {
@@ -163,8 +161,8 @@ public abstract class RegisterHandler<T> implements Comparable<RegisterHandler<?
 		Path langDir = getLangPath(modid);
 		File langFile = getOrCreateJsonFile(langDir, RapidRegister.getLang() + JSON);
 		if (langFile == null) return;
-		try {
-			Map<String, String> langJson = GSON.fromJson(new FileReader(langFile), LANG_MAP_TYPE.getType());
+		try (Reader reader = new FileReader(langFile)) {
+			Map<String, String> langJson = GSON.fromJson(reader, LANG_MAP_TYPE.getType());
 			String langKey = getLangKey(type, identifier);
 			if (!langJson.containsKey(langKey)) {
 				langJson.put(langKey, getLangName(identifier));
@@ -183,7 +181,7 @@ public abstract class RegisterHandler<T> implements Comparable<RegisterHandler<?
 	}
 
 	protected final String getLangKey(String type, Identifier identifier) {
-		return type + "." + identifier.getNamespace() + "." + identifier.getPath();
+		return Util.createTranslationKey(type, identifier);
 	}
 
 	protected final String getLangName(Identifier identifier) {

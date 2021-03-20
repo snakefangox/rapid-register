@@ -7,12 +7,13 @@ import net.snakefangox.rapidregister.annotations.RegisterContents;
 
 import java.lang.reflect.Field;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @SuppressWarnings("rawtypes")
 public class ScreenHandlerTypeHandler extends RegisterHandler<ScreenHandlerType> {
 
 	public ScreenHandlerTypeHandler() {
-		super(ScreenHandlerType.class);
+		super(ScreenHandlerType.class, "gui");
 	}
 
 	@Override
@@ -22,5 +23,7 @@ public class ScreenHandlerTypeHandler extends RegisterHandler<ScreenHandlerType>
 
 	@Override
 	protected void dataGen(ScreenHandlerType entry, Identifier identifier, Field field, Path assetPath, Path dataPath, RegisterContents classDefaults) {
+		addLangKey(identifier.getNamespace(), "container", identifier);
+		ensureDirExists(Paths.get(getTexturePath()));
 	}
 }

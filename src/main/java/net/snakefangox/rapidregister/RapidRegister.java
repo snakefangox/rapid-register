@@ -5,8 +5,12 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.minecraft.block.Block;
 import net.snakefangox.rapidregister.registerhandler.*;
+import net.snakefangox.rapidregister.registerhandler.dynamic.BiomeHandler;
+import net.snakefangox.rapidregister.registerhandler.dynamic.DimensionTypeHandler;
+import net.snakefangox.rapidregister.registerhandler.FeatureHandler;
 import net.snakefangox.rapidregister.storage.TypeRegisterSet;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -31,8 +35,8 @@ public class RapidRegister implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
+		ServerLifecycleEvents.SERVER_STARTING.register(typeRegister::onServerStart);
 		register("modid", TestClass.class);
-		System.exit(0);
 	}
 
 	/**
@@ -83,9 +87,14 @@ public class RapidRegister implements ModInitializer {
 		addRegisterHandler(new ItemHandler<>(Item.class));
 		addRegisterHandler(new ItemHandler<>(ToolItem.class));
 		addRegisterHandler(new BlockHandler<>(Block.class));
-		addRegisterHandler(new BlockEntityHandler());
+		addRegisterHandler(new BlockEntityTypeHandler());
 		addRegisterHandler(new ScreenHandlerTypeHandler());
 		addRegisterHandler(new EntityTypeHandler());
+		addRegisterHandler(new SoundHandler());
+		addRegisterHandler(new StatusEffectHandler());
+		addRegisterHandler(new FeatureHandler());
+		addRegisterHandler(new BiomeHandler());
+		addRegisterHandler(new DimensionTypeHandler());
 	}
 
 	static {
