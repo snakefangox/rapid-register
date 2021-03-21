@@ -27,10 +27,10 @@ public abstract class DynamicRegisterHandler<T> extends RegisterHandler<T> {
 	}
 
 	public final void lateRegister(MinecraftServer server) {
-		while (!toRegister.isEmpty()) register(server.getRegistryManager(), toRegister.pop());
+		while (!toRegister.isEmpty()) register(server, server.getRegistryManager(), toRegister.pop());
 	}
 
-	protected abstract void register(DynamicRegistryManager manager, Storage storage);
+	protected abstract void register(MinecraftServer server, DynamicRegistryManager manager, Storage storage);
 
 	@Override
 	protected void dataGen(T entry, Identifier identifier, Field field, Path assetPath, Path dataPath, RegisterContents classDefaults) {

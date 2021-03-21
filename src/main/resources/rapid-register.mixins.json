@@ -4,6 +4,7 @@
   "package": "net.snakefangox.rapidregister.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
+    "MixinChunkGenerator"
   ],
   "client": [
   ],

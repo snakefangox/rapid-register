@@ -9,6 +9,7 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.minecraft.block.Block;
 import net.snakefangox.rapidregister.registerhandler.*;
 import net.snakefangox.rapidregister.registerhandler.dynamic.BiomeHandler;
+import net.snakefangox.rapidregister.registerhandler.dynamic.DimensionOptionsHandler;
 import net.snakefangox.rapidregister.registerhandler.dynamic.DimensionTypeHandler;
 import net.snakefangox.rapidregister.registerhandler.FeatureHandler;
 import net.snakefangox.rapidregister.storage.TypeRegisterSet;
@@ -36,7 +37,6 @@ public class RapidRegister implements ModInitializer {
 	@Override
 	public void onInitialize() {
 		ServerLifecycleEvents.SERVER_STARTING.register(typeRegister::onServerStart);
-		register("modid", TestClass.class);
 	}
 
 	/**
@@ -95,6 +95,8 @@ public class RapidRegister implements ModInitializer {
 		addRegisterHandler(new FeatureHandler());
 		addRegisterHandler(new BiomeHandler());
 		addRegisterHandler(new DimensionTypeHandler());
+		addRegisterHandler(new DimensionOptionsHandler());
+		addRegisterHandler(new ChunkGeneratorHandler());
 	}
 
 	static {
