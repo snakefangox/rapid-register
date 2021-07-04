@@ -16,6 +16,6 @@ public class DimensionOptionsHandler extends DynamicRegisterHandler<DimensionOpt
 	@Override
 	protected void register(MinecraftServer server, DynamicRegistryManager manager, Storage storage) {
 		server.getSaveProperties().getGeneratorOptions().getDimensions()
-				.add(storage.getRegistryKey(Registry.DIMENSION_OPTIONS), storage.obj, Lifecycle.stable());
+				.add(storage.getRegistryKey(Registry.DIMENSION_KEY), storage.obj, Lifecycle.stable());
 	}
 }
