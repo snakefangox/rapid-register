@@ -6,6 +6,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.Rarity;
 import net.minecraft.util.registry.Registry;
 import net.snakefangox.rapidregister.RapidRegister;
 import net.snakefangox.rapidregister.annotations.BlockMeta;
@@ -32,7 +33,7 @@ public class BlockHandler<T extends Block> extends RegisterHandler<T> {
 		BlockMeta meta = getOrDefault(field, classDefaults);
 		Registry.register(Registry.BLOCK, identifier, obj);
 		if (meta.registerItem()) {
-			Item.Settings settings = new Item.Settings().maxCount(meta.maxCount()).rarity(meta.rarity());
+			Item.Settings settings = new Item.Settings().maxCount(meta.maxCount()).rarity(Rarity.values()[meta.rarity()]);
 			settings.group(getItemGroup(meta.blockItemGroup().replace(":", ".")));
 			Registry.register(Registry.ITEM, identifier, new BlockItem(obj, settings));
 		}

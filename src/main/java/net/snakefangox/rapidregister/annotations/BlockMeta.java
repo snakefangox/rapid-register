@@ -1,7 +1,6 @@
 package net.snakefangox.rapidregister.annotations;
 
 import net.minecraft.util.Identifier;
-import net.minecraft.util.Rarity;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -21,5 +20,5 @@ public @interface BlockMeta {
 
 	int maxCount() default 64;
 
-	Rarity rarity() default Rarity.COMMON;
+	int rarity() default 0;
 }
