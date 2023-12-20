@@ -50,6 +50,7 @@ public class RapidRegister implements ModInitializer {
 	private static void registerClass(Class<?> clazz, String modid) {
 		Arrays.stream(clazz.getFields()).filter(f -> Modifier.isStatic(f.getModifiers()))
 				.forEach(f -> typeRegister.attemptRegister(clazz, f, modid));
+		typeRegister.postRegister();
 	}
 
 	public static void addRegisterHandler(RegisterHandler<?> registerHandler) {
@@ -84,6 +85,7 @@ public class RapidRegister implements ModInitializer {
 	}
 
 	private static void registerDefaultHandlers() {
+		addRegisterHandler(new ItemGroupHandler());
 		addRegisterHandler(new ItemHandler<>(Item.class));
 		addRegisterHandler(new ItemHandler<>(ToolItem.class));
 		addRegisterHandler(new BlockHandler<>(Block.class));

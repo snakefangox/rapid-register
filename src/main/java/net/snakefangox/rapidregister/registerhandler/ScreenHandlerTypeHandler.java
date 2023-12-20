@@ -1,8 +1,9 @@
 package net.snakefangox.rapidregister.registerhandler;
 
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 import net.snakefangox.rapidregister.annotations.RegisterContents;
 
 import java.lang.reflect.Field;
@@ -18,7 +19,7 @@ public class ScreenHandlerTypeHandler extends RegisterHandler<ScreenHandlerType>
 
 	@Override
 	protected void register(ScreenHandlerType obj, Identifier identifier, Field field, RegisterContents classDefaults) {
-		Registry.register(Registry.SCREEN_HANDLER, identifier, obj);
+		Registry.register(Registries.SCREEN_HANDLER, identifier, obj);
 	}
 
 	@Override

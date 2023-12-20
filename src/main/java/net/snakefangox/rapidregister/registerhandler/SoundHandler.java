@@ -1,9 +1,10 @@
 package net.snakefangox.rapidregister.registerhandler;
 
 import com.google.gson.reflect.TypeToken;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 import net.snakefangox.rapidregister.RapidRegister;
 import net.snakefangox.rapidregister.annotations.RegisterContents;
 
@@ -27,14 +28,14 @@ public class SoundHandler extends RegisterHandler<SoundEvent> {
 	@Override
 	protected void register(SoundEvent obj, Identifier identifier, Field field, RegisterContents classDefaults) {
 		if (obj == null) {
-			obj = new SoundEvent(identifier);
+			obj = SoundEvent.of(identifier);
 			try {
 				field.set(null, obj);
 			} catch (IllegalAccessException e) {
 				RapidRegister.LOGGER.error("Could not fill " + field.getName() + ". Check it isn't final or just pre-assign the sound event");
 			}
 		}
-		Registry.register(Registry.SOUND_EVENT, identifier, obj);
+		Registry.register(Registries.SOUND_EVENT, identifier, obj);
 	}
 
 	@Override

@@ -1,7 +1,8 @@
 package net.snakefangox.rapidregister.registerhandler;
 
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.gen.feature.Feature;
 import net.snakefangox.rapidregister.annotations.RegisterContents;
 
@@ -17,7 +18,7 @@ public class FeatureHandler extends RegisterHandler<Feature> {
 
 	@Override
 	protected void register(Feature obj, Identifier identifier, Field field, RegisterContents classDefaults) {
-		Registry.register(Registry.FEATURE, identifier, obj);
+		Registry.register(Registries.FEATURE, identifier, obj);
 	}
 
 	@Override

@@ -1,8 +1,9 @@
 package net.snakefangox.rapidregister.registerhandler;
 
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 import net.snakefangox.rapidregister.annotations.RegisterContents;
 
 import java.lang.reflect.Field;
@@ -17,7 +18,7 @@ public class BlockEntityTypeHandler extends RegisterHandler<BlockEntityType> {
 
 	@Override
 	protected void register(BlockEntityType obj, Identifier identifier, Field field, RegisterContents classDefaults) {
-		Registry.register(Registry.BLOCK_ENTITY_TYPE, identifier, obj);
+		Registry.register(Registries.BLOCK_ENTITY_TYPE, identifier, obj);
 	}
 
 	@Override

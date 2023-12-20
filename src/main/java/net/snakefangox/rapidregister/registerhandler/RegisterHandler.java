@@ -3,19 +3,22 @@ package net.snakefangox.rapidregister.registerhandler;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Util;
 import net.snakefangox.rapidregister.RapidRegister;
+import net.snakefangox.rapidregister.annotations.ItemMeta;
 import net.snakefangox.rapidregister.annotations.RegisterContents;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
 import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 public abstract class RegisterHandler<T> implements Comparable<RegisterHandler<?>> {
 
@@ -26,6 +29,7 @@ public abstract class RegisterHandler<T> implements Comparable<RegisterHandler<?
 
 	private final Class<T> type;
 	private final String typeName;
+	private final HashMap<RegistryKey<ItemGroup>, List<Item>> itemGroups = new HashMap<>();
 
 	public RegisterHandler(Class<T> type) {
 		this(type, type.getSimpleName());
@@ -206,6 +210,28 @@ public abstract class RegisterHandler<T> implements Comparable<RegisterHandler<?
 
 	protected final String getTemplateName(String prefix) {
 		return (prefix.isEmpty() ? "" : prefix + "_") + typeName + ".json";
+	}
+
+	protected final void addItemToGroup(Item item, RegistryKey<ItemGroup> itemGroup) {
+		itemGroups.getOrDefault(itemGroup, new ArrayList<>()).add(item);
+	}
+
+	public final void postRegister() {
+		for (Map.Entry<RegistryKey<ItemGroup>, List<Item>> entry : itemGroups.entrySet()) {
+			ItemGroupEvents.modifyEntriesEvent(entry.getKey()).register(content -> {
+				for (Item item : entry.getValue()) {
+					content.add(item);
+				}
+			});
+		}
+
+		itemGroups.clear();
+	}
+
+	protected final ItemMeta getOrDefault(Field field, RegisterContents classDefaults) {
+		ItemMeta meta = field.getAnnotation(ItemMeta.class);
+		meta = meta == null ? classDefaults.defaultItemMeta() : meta;
+		return meta;
 	}
 
 	public Class<T> getType() {

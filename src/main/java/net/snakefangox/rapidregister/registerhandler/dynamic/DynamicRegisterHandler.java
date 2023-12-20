@@ -1,11 +1,12 @@
 package net.snakefangox.rapidregister.registerhandler.dynamic;
 
 import com.mojang.serialization.Lifecycle;
+import net.minecraft.registry.DynamicRegistryManager;
+import net.minecraft.registry.MutableRegistry;
+import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.DynamicRegistryManager;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.RegistryKey;
 import net.snakefangox.rapidregister.annotations.RegisterContents;
 import net.snakefangox.rapidregister.registerhandler.RegisterHandler;
 
@@ -37,7 +38,7 @@ public abstract class DynamicRegisterHandler<T> extends RegisterHandler<T> {
 	}
 
 	protected final void addToDynRegistry(DynamicRegistryManager manager, RegistryKey<? extends Registry<T>> registryKey, Storage storage) {
-		manager.getMutable(registryKey).add(storage.getRegistryKey(registryKey), storage.obj, Lifecycle.stable());
+		((MutableRegistry<T>) manager.get(registryKey)).add(storage.getRegistryKey(registryKey), storage.obj, Lifecycle.stable());
 	}
 
 	protected final class Storage {

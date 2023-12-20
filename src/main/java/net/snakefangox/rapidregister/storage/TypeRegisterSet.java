@@ -1,5 +1,6 @@
 package net.snakefangox.rapidregister.storage;
 
+import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.server.MinecraftServer;
 import net.snakefangox.rapidregister.RapidRegister;
 import net.snakefangox.rapidregister.annotations.Exclude;
@@ -38,6 +39,12 @@ public class TypeRegisterSet {
 			if (registerHandler.attemptRegister(register, field, modid)) return;
 		}
 		RapidRegister.LOGGER.warn("No matching RegisterHandler found for field " + field.getName() + " in class " + clazz.getName());
+	}
+
+	public void postRegister() {
+		for (RegisterHandler<?> registerHandler : registerHandlers) {
+			registerHandler.postRegister();
+		}
 	}
 
 	public void onServerStart(MinecraftServer server) {

@@ -3,12 +3,16 @@ package net.snakefangox.rapidregister.registerhandler;
 import java.lang.reflect.Field;
 import java.nio.file.Path;
 
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
+import net.snakefangox.rapidregister.annotations.ItemMeta;
 import net.snakefangox.rapidregister.annotations.RegisterContents;
 import net.snakefangox.rapidregister.storage.TemplateHandler;
 
 import net.minecraft.item.Item;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 public class ItemHandler<T extends Item> extends RegisterHandler<T> {
 
@@ -18,7 +22,9 @@ public class ItemHandler<T extends Item> extends RegisterHandler<T> {
 
 	@Override
 	protected void register(T obj, Identifier identifier, Field field, RegisterContents classDefaults) {
-		Registry.register(Registry.ITEM, identifier, obj);
+		ItemMeta meta = getOrDefault(field, classDefaults);
+		Registry.register(Registries.ITEM, identifier, obj);
+		addItemToGroup(obj, RegistryKey.of(RegistryKeys.ITEM_GROUP, new Identifier(meta.itemGroup())));
 	}
 
 	@Override

@@ -1,8 +1,9 @@
 package net.snakefangox.rapidregister.registerhandler;
 
 import net.minecraft.entity.EntityType;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 import net.snakefangox.rapidregister.annotations.RegisterContents;
 
 import java.lang.reflect.Field;
@@ -17,7 +18,7 @@ public class EntityTypeHandler extends RegisterHandler<EntityType> {
 
 	@Override
 	protected void register(EntityType obj, Identifier identifier, Field field, RegisterContents classDefaults) {
-		Registry.register(Registry.ENTITY_TYPE, identifier, obj);
+		Registry.register(Registries.ENTITY_TYPE, identifier, obj);
 	}
 
 	@Override
