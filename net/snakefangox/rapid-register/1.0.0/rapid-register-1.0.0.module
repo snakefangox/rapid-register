@@ -27,11 +27,11 @@
         {
           "name": "rapid-register-1.0.0.jar",
           "url": "rapid-register-1.0.0.jar",
-          "size": 43255,
-          "sha512": "e127e3047e843fa3a578ffaa6cb1d8dfb6d3a11abb2e454624189d5616a54e8034251330ca04ce5b0c35cf7c00613612c69ff3793391af21a9cb9eefa2e21159",
-          "sha256": "1ba230c1079fce1e798df05a6265827dfdcadbd80477327cf90fea495ec32406",
-          "sha1": "9f17535964cdea9c126f34c3eef6f0d0848a307e",
-          "md5": "a90216f075becd3eabad434a1bb8d7f6"
+          "size": 43288,
+          "sha512": "e4307b86bcf03b37052ea083ba01db24423093e2f41b9080ab7b2ae706f489a5c4608193b91f838e405f6631fdaca90a3925190fe163748bd4e596cd53405bfe",
+          "sha256": "d06ba3f68599484431bb3a37ed3d712f1c69890df47f0f07b630662da451f266",
+          "sha1": "329d3d962d156ff43844f3e92f90b2131d9632a8",
+          "md5": "6049ec71f52208c12fd5f7895de4bc46"
         }
       ]
     },
@@ -64,11 +64,11 @@
         {
           "name": "rapid-register-1.0.0.jar",
           "url": "rapid-register-1.0.0.jar",
-          "size": 43255,
-          "sha512": "e127e3047e843fa3a578ffaa6cb1d8dfb6d3a11abb2e454624189d5616a54e8034251330ca04ce5b0c35cf7c00613612c69ff3793391af21a9cb9eefa2e21159",
-          "sha256": "1ba230c1079fce1e798df05a6265827dfdcadbd80477327cf90fea495ec32406",
-          "sha1": "9f17535964cdea9c126f34c3eef6f0d0848a307e",
-          "md5": "a90216f075becd3eabad434a1bb8d7f6"
+          "size": 43288,
+          "sha512": "e4307b86bcf03b37052ea083ba01db24423093e2f41b9080ab7b2ae706f489a5c4608193b91f838e405f6631fdaca90a3925190fe163748bd4e596cd53405bfe",
+          "sha256": "d06ba3f68599484431bb3a37ed3d712f1c69890df47f0f07b630662da451f266",
+          "sha1": "329d3d962d156ff43844f3e92f90b2131d9632a8",
+          "md5": "6049ec71f52208c12fd5f7895de4bc46"
         }
       ]
     },
@@ -84,11 +84,11 @@
         {
           "name": "rapid-register-1.0.0-sources.jar",
           "url": "rapid-register-1.0.0-sources.jar",
-          "size": 25513,
-          "sha512": "11d5fbc24b65d4630d90bd6a7969db525ca985d41812dd91a9af84ab6b1b132d1494b8721757ff723cc5decbdf420ec7e0df294ad608b357e4a87616d5d8638b",
-          "sha256": "43bd080d8edefa60ea1852354aa519fe3ab671633712df0b09b617e6f4fb868f",
-          "sha1": "7d81b372862cdc35d9ff1fcfe4fb4efa573f2a77",
-          "md5": "fe9d234a1487e3d615a348f788d55534"
+          "size": 25530,
+          "sha512": "a71482d154a0e4066891092f470adf89723505831c27e412ef9db7f33cff2024b2784b616714cde7a523b05ec9b080762b5de0b118642045f73e314f4d51b8e2",
+          "sha256": "0da81fecf5f9e122a63f5faeb7a8cc1c718ddd1a104d5a433f59bb96e4c9333f",
+          "sha1": "089ce336ebfdb3870e727472ce9592abcb8c2fe2",
+          "md5": "045ad249909863180a9ce00fcf9106a5"
         }
       ]
     }
