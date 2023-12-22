@@ -1,0 +1,96 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "net.snakefangox",
+    "module": "rapid-register",
+    "version": "1.0.0",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "8.5"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 17,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api"
+      },
+      "files": [
+        {
+          "name": "rapid-register-1.0.0.jar",
+          "url": "rapid-register-1.0.0.jar",
+          "size": 43237,
+          "sha512": "63c605ab27f773bebac673a1e95616a760075fa85e61321cdfdc107c4e7ae4f1fbd38d083da063b1956371f2b5f0856f1453fb00a9b3330ca026214db16cc072",
+          "sha256": "b6f20bd377033eb7b080a23d5bc7337b9a0139c3e5b9d75041ba41c5b57e41e5",
+          "sha1": "c8e6521ae0b767977e6bc91c5a91ac16a9f9ebf3",
+          "md5": "7d692ef8e87415298aabd7e2004adea1"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 17,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "net.fabricmc",
+          "module": "fabric-loader",
+          "version": {
+            "requires": "0.15.2"
+          }
+        },
+        {
+          "group": "net.fabricmc.fabric-api",
+          "module": "fabric-api",
+          "version": {
+            "requires": "0.91.3+1.20.4"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "rapid-register-1.0.0.jar",
+          "url": "rapid-register-1.0.0.jar",
+          "size": 43237,
+          "sha512": "63c605ab27f773bebac673a1e95616a760075fa85e61321cdfdc107c4e7ae4f1fbd38d083da063b1956371f2b5f0856f1453fb00a9b3330ca026214db16cc072",
+          "sha256": "b6f20bd377033eb7b080a23d5bc7337b9a0139c3e5b9d75041ba41c5b57e41e5",
+          "sha1": "c8e6521ae0b767977e6bc91c5a91ac16a9f9ebf3",
+          "md5": "7d692ef8e87415298aabd7e2004adea1"
+        }
+      ]
+    },
+    {
+      "name": "sourcesElements",
+      "attributes": {
+        "org.gradle.category": "documentation",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.docstype": "sources",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "rapid-register-1.0.0-sources.jar",
+          "url": "rapid-register-1.0.0-sources.jar",
+          "size": 25446,
+          "sha512": "3609f1e19d6602662109e5c440bdb30d08a5eacbd110d721bd229e9537f5dbe522668712a9ffdc9687b4f1a28a7e52033c0a70bdf5b46894a6462482d69d315e",
+          "sha256": "43db84ea52abe3253459129ddb785e38ef5f4bfc414aceb4142b20f3356c74c3",
+          "sha1": "64f5ec01d9729910ba5b5323db43006959d73168",
+          "md5": "537da1f84001088f7e2467df3ced7490"
+        }
+      ]
+    }
+  ]
+}
