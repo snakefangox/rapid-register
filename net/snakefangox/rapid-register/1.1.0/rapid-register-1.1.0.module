@@ -3,7 +3,7 @@
   "component": {
     "group": "net.snakefangox",
     "module": "rapid-register",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "attributes": {
       "org.gradle.status": "release"
     }
@@ -25,13 +25,13 @@
       },
       "files": [
         {
-          "name": "rapid-register-1.0.0.jar",
-          "url": "rapid-register-1.0.0.jar",
+          "name": "rapid-register-1.1.0.jar",
+          "url": "rapid-register-1.1.0.jar",
           "size": 43288,
-          "sha512": "e4307b86bcf03b37052ea083ba01db24423093e2f41b9080ab7b2ae706f489a5c4608193b91f838e405f6631fdaca90a3925190fe163748bd4e596cd53405bfe",
-          "sha256": "d06ba3f68599484431bb3a37ed3d712f1c69890df47f0f07b630662da451f266",
-          "sha1": "329d3d962d156ff43844f3e92f90b2131d9632a8",
-          "md5": "6049ec71f52208c12fd5f7895de4bc46"
+          "sha512": "2242c8c361b984c69af42c64abf40de4aabccf7db792a0e58ed08d2aa4830cbd5a6b25eb990675edfd5358f056ca82464c322da3f0be19f87233010fb13d2aef",
+          "sha256": "693859b3d4d6e339aa05f922cc4213af586eb8861bb40c6cdbbf9680dd4983fc",
+          "sha1": "2dadf5fe5ead000fc4cf22dba9f025333398f413",
+          "md5": "1cb9230d96b4d21abc9b0ca81cdb9608"
         }
       ]
     },
@@ -62,13 +62,13 @@
       ],
       "files": [
         {
-          "name": "rapid-register-1.0.0.jar",
-          "url": "rapid-register-1.0.0.jar",
+          "name": "rapid-register-1.1.0.jar",
+          "url": "rapid-register-1.1.0.jar",
           "size": 43288,
-          "sha512": "e4307b86bcf03b37052ea083ba01db24423093e2f41b9080ab7b2ae706f489a5c4608193b91f838e405f6631fdaca90a3925190fe163748bd4e596cd53405bfe",
-          "sha256": "d06ba3f68599484431bb3a37ed3d712f1c69890df47f0f07b630662da451f266",
-          "sha1": "329d3d962d156ff43844f3e92f90b2131d9632a8",
-          "md5": "6049ec71f52208c12fd5f7895de4bc46"
+          "sha512": "2242c8c361b984c69af42c64abf40de4aabccf7db792a0e58ed08d2aa4830cbd5a6b25eb990675edfd5358f056ca82464c322da3f0be19f87233010fb13d2aef",
+          "sha256": "693859b3d4d6e339aa05f922cc4213af586eb8861bb40c6cdbbf9680dd4983fc",
+          "sha1": "2dadf5fe5ead000fc4cf22dba9f025333398f413",
+          "md5": "1cb9230d96b4d21abc9b0ca81cdb9608"
         }
       ]
     },
@@ -82,13 +82,13 @@
       },
       "files": [
         {
-          "name": "rapid-register-1.0.0-sources.jar",
-          "url": "rapid-register-1.0.0-sources.jar",
+          "name": "rapid-register-1.1.0-sources.jar",
+          "url": "rapid-register-1.1.0-sources.jar",
           "size": 25530,
-          "sha512": "a71482d154a0e4066891092f470adf89723505831c27e412ef9db7f33cff2024b2784b616714cde7a523b05ec9b080762b5de0b118642045f73e314f4d51b8e2",
-          "sha256": "0da81fecf5f9e122a63f5faeb7a8cc1c718ddd1a104d5a433f59bb96e4c9333f",
-          "sha1": "089ce336ebfdb3870e727472ce9592abcb8c2fe2",
-          "md5": "045ad249909863180a9ce00fcf9106a5"
+          "sha512": "1bf80aef215c30f1ea440fa72112f1532c097e704860e3277bfeeaa3f1fc8f38fe3f82592dc6bde41eaf028a66ff750831e3d66d827f7fbf86d8a9096629c5a7",
+          "sha256": "ff730e4b877fb95c71b5cc8483552a97a7cd123738492a8d6a1bce5c173b6283",
+          "sha1": "09d8c04a636448d893beec2f4604f80a87f79e9e",
+          "md5": "ecb914033aa907a1f365b2d3ab9e223f"
         }
       ]
     }
